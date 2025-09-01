@@ -1,0 +1,34 @@
+{
+  "name": "luisa-portfolio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "postcss themes/luisa/assets/css/tailwind.css -o themes/luisa/assets/css/main.css",
+    "watch:css": "postcss themes/luisa/assets/css/tailwind.css -o themes/luisa/assets/css/main.css --watch",
+    "dev": "npm run build:css && hugo server",
+    "build": "npm run build:css && hugo --minify",
+    "preview": "npm run build && hugo server --source=public --disableFastRender",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rafaelbressan/luisa-portfolio.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/rafaelbressan/luisa-portfolio/issues"
+  },
+  "homepage": "https://github.com/rafaelbressan/luisa-portfolio#readme",
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.12",
+    "@tailwindcss/typography": "^0.5.16",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "^4.1.12"
+  }
+}
