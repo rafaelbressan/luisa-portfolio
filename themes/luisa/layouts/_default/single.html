@@ -1,0 +1,37 @@
+{{ define "main" }}
+  <div class="content-wrapper">
+    <article class="project">
+      <header class="project-header">
+        <h1>{{ .Title }}</h1>
+        
+        <div class="project-meta">
+          {{ if .Params.authors }}
+            <p><strong>Authors:</strong> {{ delimit .Params.authors ", " }}</p>
+          {{ end }}
+          
+          {{ if .Params.start_date }}
+            <p><strong>Start Date:</strong> {{ .Params.start_date | time.Format "January 2, 2006" }}</p>
+          {{ end }}
+          
+          {{ if .Params.end_date }}
+            <p><strong>Completion Date:</strong> {{ .Params.end_date | time.Format "January 2, 2006" }}</p>
+          {{ end }}
+          
+          {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+          {{ $dateHuman := .Date | time.Format "January 2, 2006" }}
+          <p><strong>Published:</strong> <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time></p>
+          
+          {{ if .Params.description }}
+            <p class="project-description">{{ .Params.description }}</p>
+          {{ end }}
+        </div>
+      </header>
+
+      <div class="project-content">
+        {{ .Content }}
+      </div>
+
+      {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+    </article>
+  </div>
+{{ end }}

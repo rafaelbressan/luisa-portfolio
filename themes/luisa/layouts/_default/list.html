@@ -1,0 +1,63 @@
+{{ define "main" }}
+  <div class="content-wrapper">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    
+    <div class="projects-list">
+      {{ range .Pages }}
+        <article class="project-summary">
+          <div class="project-featured-image">
+            <a href="{{ .RelPermalink }}">
+              {{ if .Params.featured_image }}
+                <img src="{{ .Params.featured_image | relURL }}" alt="{{ .Title }}" class="featured-img">
+              {{ else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+                {{ $image := .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+                <img src="{{ $image.RelPermalink }}" alt="{{ .Title }}" class="featured-img">
+              {{ else }}
+                {{ $fallbackImages := slice "/spacejoy-c0JoR_-2x3E-unsplash.jpg" "/spacejoy-umAXneH4GhA-unsplash.jpg" "/spacejoy-YqFz7UMm8qE-unsplash.jpg" }}
+                {{ $randomImage := index $fallbackImages (mod .Date.Unix (len $fallbackImages)) }}
+                <img src="{{ $randomImage | relURL }}" alt="{{ .Title }}" class="featured-img">
+              {{ end }}
+            </a>
+          </div>
+          
+          <div class="project-summary-text">
+            <header>
+              <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
+              
+              <div class="project-meta-list">
+                {{ if .Params.description }}
+                  <p class="project-description">{{ .Params.description }}</p>
+                {{ end }}
+                
+                <div class="meta-row">
+                  {{ if .Params.authors }}
+                    <span><strong>Authors:</strong> {{ delimit .Params.authors ", " }}</span>
+                  {{ end }}
+                  
+                  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
+                  {{ $dateHuman := .Date | time.Format "January 2, 2006" }}
+                  <span><strong>Published:</strong> <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time></span>
+                </div>
+                
+                <div class="meta-row">
+                  {{ if .Params.start_date }}
+                    <span><strong>Started:</strong> {{ .Params.start_date | time.Format "January 2, 2006" }}</span>
+                  {{ end }}
+                  
+                  {{ if .Params.end_date }}
+                    <span><strong>Completed:</strong> {{ .Params.end_date | time.Format "January 2, 2006" }}</span>
+                  {{ end }}
+                </div>
+              </div>
+            </header>
+            
+            <div class="project-summary-content">
+              {{ .Summary }}
+            </div>
+          </div>
+        </article>
+      {{ end }}
+    </div>
+  </div>
+{{ end }}
