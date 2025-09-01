@@ -7,16 +7,7 @@
       {{ range first 3 (where site.RegularPages "Section" "posts") }}
         <div class="project-card">
           <a href="{{ .RelPermalink }}">
-            {{ if .Params.featured_image }}
-              <img src="{{ .Params.featured_image | relURL }}" alt="{{ .Title }}" class="project-image">
-            {{ else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
-              {{ $image := .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
-              <img src="{{ $image.RelPermalink }}" alt="{{ .Title }}" class="project-image">
-            {{ else }}
-              {{ $fallbackImages := slice "/spacejoy-c0JoR_-2x3E-unsplash.jpg" "/spacejoy-umAXneH4GhA-unsplash.jpg" "/spacejoy-YqFz7UMm8qE-unsplash.jpg" }}
-              {{ $randomImage := index $fallbackImages (mod .Date.Unix (len $fallbackImages)) }}
-              <img src="{{ $randomImage | relURL }}" alt="{{ .Title }}" class="project-image">
-            {{ end }}
+            {{ partial "project-image.html" . }}
             <div class="project-info">
               <h3 class="project-title">{{ .Title }}</h3>
               <p class="project-description">{{ .Summary | truncate 120 }}</p>

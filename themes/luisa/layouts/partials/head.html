@@ -1,8 +1,44 @@
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+{{/* Preconnect for performance */}}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap" rel="stylesheet">
+
+{{/* Title tag */}}
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ printf "%s | %s" .Title site.Title }}{{ end }}</title>
+
+{{/* Favicon and app icons */}}
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon.ico">
+<meta name="msapplication-TileColor" content="#c59483">
+
+{{/* SEO Meta Tags */}}
+{{ partial "head/seo.html" . }}
+
+{{/* Open Graph and Twitter Cards */}}
+{{ partial "head/opengraph.html" . }}
+
+{{/* Structured Data (JSON-LD) */}}
+{{ partial "head/jsonld.html" . }}
+
+{{/* DNS Prefetch for external resources */}}
+<link rel="dns-prefetch" href="//fonts.googleapis.com">
+<link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+{{/* Fonts */}}
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@200..800&display=swap" rel="stylesheet">
+
+{{/* CSS */}}
 {{ partialCached "head/css.html" . }}
+
+{{/* JavaScript */}}
 {{ partialCached "head/js.html" . }}
+
+{{/* Additional performance hints */}}
+<meta name="format-detection" content="telephone=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="{{ site.Title }}">

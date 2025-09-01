@@ -1,0 +1,126 @@
+{{/* 
+  Open Graph and Twitter Card Meta Tags
+  For social media sharing optimization
+*/}}
+
+{{/* Basic Open Graph */}}
+<meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}">
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:url" content="{{ .Permalink }}">
+
+{{/* Description */}}
+{{- $description := "" }}
+{{- if .Description }}
+  {{- $description = .Description }}
+{{- else if .Summary }}
+  {{- $description = .Summary | truncate 160 }}
+{{- else if .Params.description }}
+  {{- $description = .Params.description }}
+{{- else if site.Params.description }}
+  {{- $description = site.Params.description }}
+{{- end }}
+
+{{- if $description }}
+  <meta property="og:description" content="{{ $description | plainify | htmlEscape }}">
+{{- end }}
+
+{{/* Open Graph Type */}}
+{{- if .IsHome }}
+  <meta property="og:type" content="website">
+{{- else if .IsPage }}
+  <meta property="og:type" content="article">
+{{- else }}
+  <meta property="og:type" content="website">
+{{- end }}
+
+{{/* Language */}}
+<meta property="og:locale" content="{{ replace site.LanguageCode "-" "_" }}">
+
+{{/* Images for Open Graph */}}
+{{- $images := slice }}
+
+{{/* Check for page-specific featured image */}}
+{{- if .Params.featured_image }}
+  {{- $image := "" }}
+  {{- with .Resources.GetMatch .Params.featured_image }}
+    {{- $image = .Resize "1200x630 jpg q85" }}
+    {{- $images = $images | append $image.Permalink }}
+  {{- else }}
+    {{- with resources.Get .Params.featured_image }}
+      {{- $image = .Resize "1200x630 jpg q85" }}
+      {{- $images = $images | append $image.Permalink }}
+    {{- end }}
+  {{- end }}
+{{/* Check for page bundle images */}}
+{{- else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+  {{- $image := .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+  {{- $resized := $image.Resize "1200x630 jpg q85" }}
+  {{- $images = $images | append $resized.Permalink }}
+{{/* Fallback to default image */}}
+{{- else if site.Params.images.default_og_image }}
+  {{- with resources.Get site.Params.images.default_og_image }}
+    {{- $image = .Resize "1200x630 jpg q85" }}
+    {{- $images = $images | append $image.Permalink }}
+  {{- end }}
+{{- end }}
+
+{{/* Output Open Graph images */}}
+{{- range $images }}
+  <meta property="og:image" content="{{ . | absURL }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+{{- end }}
+
+{{/* Article-specific Open Graph tags */}}
+{{- if .IsPage }}
+  {{- if not .Date.IsZero }}
+    <meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">
+  {{- end }}
+  
+  {{- if not .Lastmod.IsZero }}
+    <meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}">
+  {{- end }}
+  
+  {{- if .Params.authors }}
+    {{- range .Params.authors }}
+      <meta property="article:author" content="{{ . }}">
+    {{- end }}
+  {{- end }}
+  
+  <meta property="article:section" content="{{ .Section | title }}">
+  
+  {{- if .Params.tags }}
+    {{- range .Params.tags }}
+      <meta property="article:tag" content="{{ . | title }}">
+    {{- end }}
+  {{- end }}
+{{- end }}
+
+{{/* Twitter Card Tags */}}
+<meta name="twitter:card" content="{{ if gt (len $images) 0 }}summary_large_image{{ else }}summary{{ end }}">
+
+{{- if site.Params.social.twitter }}
+  <meta name="twitter:site" content="@{{ site.Params.social.twitter }}">
+  <meta name="twitter:creator" content="@{{ site.Params.social.twitter }}">
+{{- end }}
+
+<meta name="twitter:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} | {{ site.Title }}{{ end }}">
+
+{{- if $description }}
+  <meta name="twitter:description" content="{{ $description | plainify | htmlEscape }}">
+{{- end }}
+
+{{/* Twitter Images */}}
+{{- range first 1 $images }}
+  <meta name="twitter:image" content="{{ . | absURL }}">
+  <meta name="twitter:image:alt" content="{{ if $.Params.image_alt }}{{ $.Params.image_alt }}{{ else }}{{ $.Title }}{{ end }}">
+{{- end }}
+
+{{/* Additional social meta */}}
+{{- if site.Params.social.facebook_app_id }}
+  <meta property="fb:app_id" content="{{ site.Params.social.facebook_app_id }}">
+{{- end }}
+
+{{- if site.Params.social.facebook_admin }}
+  <meta property="fb:admins" content="{{ site.Params.social.facebook_admin }}">
+{{- end }}

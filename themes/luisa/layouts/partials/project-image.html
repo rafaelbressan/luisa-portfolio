@@ -1,0 +1,51 @@
+{{/*
+  Project card image with automatic optimization
+  Context: Page object
+  Returns optimized image HTML for project cards
+*/}}
+
+{{- $image := "" }}
+{{- $alt := .Title }}
+
+{{/* Check for featured_image parameter */}}
+{{- if .Params.featured_image }}
+  {{- $src := .Params.featured_image }}
+  {{- with .Resources.GetMatch $src }}
+    {{- $image = . }}
+  {{- else }}
+    {{- with resources.Get $src }}
+      {{- $image = . }}
+    {{- end }}
+  {{- end }}
+{{/* Check for page bundle images */}}
+{{- else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+  {{- $image = .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+{{/* Fallback to random stock images */}}
+{{- else }}
+  {{- $fallbackImages := slice "/spacejoy-c0JoR_-2x3E-unsplash.jpg" "/spacejoy-umAXneH4GhA-unsplash.jpg" "/spacejoy-YqFz7UMm8qE-unsplash.jpg" }}
+  {{- $randomImage := index $fallbackImages (mod .Date.Unix (len $fallbackImages)) }}
+  {{- with resources.Get $randomImage }}
+    {{- $image = . }}
+  {{- end }}
+{{- end }}
+
+{{- if $image }}
+  {{/* Optimize for project card display (200px height) */}}
+  {{- $cardImage := $image.Fill "400x300 webp q80" }}
+  {{- $cardImageJPG := $image.Fill "400x300 jpg q80" }}
+  
+  <picture class="project-image-wrapper">
+    <source srcset="{{ $cardImage.RelPermalink }}" type="image/webp">
+    <img 
+      src="{{ $cardImageJPG.RelPermalink }}" 
+      alt="{{ $alt }}" 
+      class="project-image"
+      loading="lazy"
+      width="400"
+      height="300">
+  </picture>
+{{- else }}
+  <div class="project-image project-image-placeholder">
+    <span>Image not found</span>
+  </div>
+{{- end }}

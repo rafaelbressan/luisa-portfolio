@@ -3,6 +3,42 @@ languageCode = 'en-us'
 title = 'Luisa Bressan - Portfolio'
 theme = 'luisa'
 
+# SEO Configuration
+[params]
+  description = "Interior designer and architect creating modern, sustainable spaces. View my portfolio of residential and commercial projects."
+  author = "Luisa Bressan"
+  keywords = ["interior design", "architecture", "modern design", "sustainable design", "residential", "commercial"]
+  
+  # Social media profiles
+  [params.social]
+    twitter = "luisabressan"
+    instagram = "luisabressan"
+    linkedin = "luisa-bressan"
+    
+  # SEO Images
+  [params.images]
+    logo = "/Ativo 44.svg"
+    favicon = "/favicon.ico"
+    default_og_image = "/spacejoy-c0JoR_-2x3E-unsplash.jpg"
+
+# Sitemap configuration
+[sitemap]
+  changefreq = 'weekly'
+  filename = 'sitemap.xml'
+  priority = 0.5
+
+# Taxonomies for better content organization
+[taxonomies]
+  tag = 'tags'
+  category = 'categories'
+  author = 'authors'
+
+# Enable robots.txt generation
+enableRobotsTXT = true
+
+# Enable Git info for last modified dates
+enableGitInfo = true
+
 [build]
   writeStats = true
   

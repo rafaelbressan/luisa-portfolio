@@ -1,5 +1,7 @@
 +++
 title = 'Home'
+description = 'Interior designer and architect Luisa Bressan creates modern, sustainable spaces. Explore residential and commercial design projects featuring minimalist aesthetics and innovative solutions.'
+keywords = ['interior design', 'architecture', 'modern design', 'sustainable design', 'residential projects', 'commercial spaces', 'minimalist design']
 date = 2023-01-01T08:00:00-07:00
 draft = false
 +++

@@ -5,7 +5,7 @@ authors = ['Luisa Bressan', 'Studio Partner']
 date = 2023-01-15T09:00:00-07:00
 start_date = 2022-10-01T09:00:00-07:00
 end_date = 2023-01-10T09:00:00-07:00
-featured_image = '/spacejoy-c0JoR_-2x3E-unsplash.jpg'
+featured_image = 'featured-image.jpg'
 draft = false
 tags = ['residential', 'minimalist']
 +++

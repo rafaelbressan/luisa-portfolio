@@ -6,20 +6,9 @@
     <div class="projects-list">
       {{ range .Pages }}
         <article class="project-summary">
-          <div class="project-featured-image">
-            <a href="{{ .RelPermalink }}">
-              {{ if .Params.featured_image }}
-                <img src="{{ .Params.featured_image | relURL }}" alt="{{ .Title }}" class="featured-img">
-              {{ else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
-                {{ $image := .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
-                <img src="{{ $image.RelPermalink }}" alt="{{ .Title }}" class="featured-img">
-              {{ else }}
-                {{ $fallbackImages := slice "/spacejoy-c0JoR_-2x3E-unsplash.jpg" "/spacejoy-umAXneH4GhA-unsplash.jpg" "/spacejoy-YqFz7UMm8qE-unsplash.jpg" }}
-                {{ $randomImage := index $fallbackImages (mod .Date.Unix (len $fallbackImages)) }}
-                <img src="{{ $randomImage | relURL }}" alt="{{ .Title }}" class="featured-img">
-              {{ end }}
-            </a>
-          </div>
+          <a href="{{ .RelPermalink }}">
+            {{ partial "featured-image.html" . }}
+          </a>
           
           <div class="project-summary-text">
             <header>

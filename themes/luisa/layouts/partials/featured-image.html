@@ -1,0 +1,54 @@
+{{/*
+  Featured image with automatic optimization
+  Context: Page object
+  Returns optimized featured image HTML for project pages
+*/}}
+
+{{- $image := "" }}
+{{- $alt := .Title }}
+
+{{/* Check for featured_image parameter */}}
+{{- if .Params.featured_image }}
+  {{- $src := .Params.featured_image }}
+  {{- with .Resources.GetMatch $src }}
+    {{- $image = . }}
+  {{- else }}
+    {{- with resources.Get $src }}
+      {{- $image = . }}
+    {{- end }}
+  {{- end }}
+{{/* Check for page bundle images */}}
+{{- else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+  {{- $image = .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+{{- end }}
+
+{{- if $image }}
+  {{/* Generate multiple sizes for responsive featured image */}}
+  {{- $small := $image.Resize "600x webp q85" }}
+  {{- $medium := $image.Resize "900x webp q85" }}
+  {{- $large := $image.Resize "1200x webp q85" }}
+  
+  {{/* Generate JPEG fallbacks */}}
+  {{- $smallJPG := $image.Resize "600x jpg q85" }}
+  {{- $mediumJPG := $image.Resize "900x jpg q85" }}
+  {{- $largeJPG := $image.Resize "1200x jpg q85" }}
+
+  <div class="project-featured-image">
+    <picture>
+      <source 
+        srcset="{{ $small.RelPermalink }} 600w, {{ $medium.RelPermalink }} 900w, {{ $large.RelPermalink }} 1200w"
+        sizes="(max-width: 768px) 100vw, 900px"
+        type="image/webp">
+      
+      <img 
+        src="{{ $mediumJPG.RelPermalink }}"
+        srcset="{{ $smallJPG.RelPermalink }} 600w, {{ $mediumJPG.RelPermalink }} 900w, {{ $largeJPG.RelPermalink }} 1200w"
+        sizes="(max-width: 768px) 100vw, 900px"
+        alt="{{ $alt }}"
+        class="featured-img"
+        loading="lazy"
+        width="{{ $medium.Width }}"
+        height="{{ $medium.Height }}">
+    </picture>
+  </div>
+{{- end }}

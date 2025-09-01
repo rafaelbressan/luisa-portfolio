@@ -1,5 +1,7 @@
 +++
-title = 'About'
+title = 'About Luisa Bressan'
+description = 'Learn about Luisa Bressan, interior designer and architect specializing in modern, sustainable design. Discover her background, design philosophy, and approach to creating beautiful, functional spaces.'
+keywords = ['Luisa Bressan', 'interior designer', 'architect', 'design philosophy', 'sustainable design', 'modern architecture']
 date = 2024-01-01T00:00:00-00:00
 draft = false
 +++

@@ -196,10 +196,16 @@
   .block {
     display: block;
   }
+  .grid {
+    display: grid;
+  }
   .truncate {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+  }
+  .lowercase {
+    text-transform: lowercase;
   }
 }
 @import url('https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&display=swap');
@@ -284,6 +290,35 @@ h1, h2, h3, h4, h5, h6 {
   height: 200px;
   -o-object-fit: cover;
      object-fit: cover;
+}
+.project-image-wrapper {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+}
+.project-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.project-image-placeholder {
+  background: var(--luisa-meta-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--luisa-text);
+  opacity: 0.5;
+}
+.responsive-image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.responsive-image img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
 }
 .project-info {
   padding: 1.5rem;

@@ -1,0 +1,40 @@
+User-agent: *
+{{- if eq hugo.Environment "production" }}
+Allow: /
+{{- else }}
+Disallow: /
+{{- end }}
+
+# Sitemap
+Sitemap: {{ "sitemap.xml" | absURL }}
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Specific rules for common bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+# Block access to admin/private areas if any
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /drafts/
+
+# Allow access to CSS, JS, and images for better rendering
+Allow: /css/
+Allow: /js/
+Allow: /images/
+Allow: /*.css$
+Allow: /*.js$
+Allow: /*.jpg$
+Allow: /*.jpeg$
+Allow: /*.png$
+Allow: /*.gif$
+Allow: /*.webp$
+Allow: /*.svg$

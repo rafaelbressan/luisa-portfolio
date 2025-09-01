@@ -5,7 +5,7 @@ authors = ['Luisa Bressan']
 date = 2023-02-15T10:00:00-07:00
 start_date = 2022-11-15T09:00:00-07:00
 end_date = 2023-02-05T09:00:00-07:00
-featured_image = '/spacejoy-umAXneH4GhA-unsplash.jpg'
+featured_image = 'featured-image.jpg'
 draft = false
 tags = ['renovation', 'urban', 'industrial']
 +++

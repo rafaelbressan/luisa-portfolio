@@ -1,0 +1,147 @@
+{{/* 
+  JSON-LD Structured Data for SEO
+  Helps search engines understand the content better
+*/}}
+
+<script type="application/ld+json">
+{{- if .IsHome -}}
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "{{ site.Title }}",
+  "description": "{{ site.Params.description | plainify }}",
+  "url": "{{ site.BaseURL }}",
+  "logo": "{{ site.Params.images.logo | absURL }}",
+  "image": "{{ site.Params.images.default_og_image | absURL }}",
+  "serviceType": "Interior Design",
+  "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "US"
+  },
+  "founder": {
+    "@type": "Person",
+    "name": "{{ site.Params.author }}",
+    "jobTitle": "Interior Designer & Architect"
+  },
+  "sameAs": [
+    {{- $social := slice }}
+    {{- if site.Params.social.instagram }}
+      {{- $social = $social | append (printf "https://instagram.com/%s" site.Params.social.instagram) }}
+    {{- end }}
+    {{- if site.Params.social.twitter }}
+      {{- $social = $social | append (printf "https://twitter.com/%s" site.Params.social.twitter) }}
+    {{- end }}
+    {{- if site.Params.social.linkedin }}
+      {{- $social = $social | append (printf "https://linkedin.com/in/%s" site.Params.social.linkedin) }}
+    {{- end }}
+    {{- range $i, $url := $social }}
+      {{- if $i }},{{ end }}"{{ $url }}"
+    {{- end }}
+  ]
+}
+{{- else if .IsPage -}}
+{
+  "@context": "https://schema.org",
+  "@type": "{{ if eq .Section "posts" }}CreativeWork{{ else }}Article{{ end }}",
+  "headline": "{{ .Title }}",
+  "description": "{{ if .Description }}{{ .Description | plainify }}{{ else if .Summary }}{{ .Summary | plainify | truncate 160 }}{{ else }}{{ .Params.description | plainify }}{{ end }}",
+  "url": "{{ .Permalink }}",
+  "datePublished": "{{ .Date.Format "2006-01-02T15:04:05-07:00" }}",
+  "dateModified": "{{ .Lastmod.Format "2006-01-02T15:04:05-07:00" }}",
+  "author": {
+    "@type": "Person",
+    "name": "{{ if .Params.authors }}{{ index .Params.authors 0 }}{{ else }}{{ site.Params.author }}{{ end }}"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "{{ site.Title }}",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "{{ site.Params.images.logo | absURL }}"
+    }
+  },
+  {{- if eq .Section "posts" }}
+  "about": {
+    "@type": "Thing",
+    "name": "Interior Design Project"
+  },
+  {{- if .Params.start_date }}
+  "temporalCoverage": "{{ .Params.start_date | time.Format "2006-01-02" }}{{ if .Params.end_date }}/{{ .Params.end_date | time.Format "2006-01-02" }}{{ end }}",
+  {{- end }}
+  {{- end }}
+  {{- $image := "" }}
+  {{- if .Params.featured_image }}
+    {{- with .Resources.GetMatch .Params.featured_image }}
+      {{- $image = .Resize "1200x630 jpg q85" }}
+    {{- else }}
+      {{- with resources.Get .Params.featured_image }}
+        {{- $image = .Resize "1200x630 jpg q85" }}
+      {{- end }}
+    {{- end }}
+  {{- else if .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+    {{- $res := .Resources.GetMatch "*.{jpg,jpeg,png,gif,webp}" }}
+    {{- $image = $res.Resize "1200x630 jpg q85" }}
+  {{- end }}
+  {{- if $image }}
+  "image": {
+    "@type": "ImageObject",
+    "url": "{{ $image.Permalink | absURL }}",
+    "width": {{ $image.Width }},
+    "height": {{ $image.Height }}
+  },
+  {{- end }}
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "{{ .Permalink }}"
+  },
+  {{- if .Params.tags }}
+  "keywords": [
+    {{- range $i, $tag := .Params.tags }}
+      {{- if $i }},{{ end }}"{{ $tag }}"
+    {{- end }}
+  ],
+  {{- end }}
+  "inLanguage": "{{ site.LanguageCode }}"
+}
+{{- else -}}
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "{{ .Title }}",
+  "description": "{{ if .Description }}{{ .Description | plainify }}{{ else }}{{ site.Params.description | plainify }}{{ end }}",
+  "url": "{{ .Permalink }}",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "{{ site.Title }}",
+    "url": "{{ site.BaseURL }}"
+  },
+  "inLanguage": "{{ site.LanguageCode }}",
+  "potentialAction": {
+    "@type": "ReadAction",
+    "target": "{{ .Permalink }}"
+  }
+}
+{{- end -}}
+</script>
+
+{{/* Website structured data (always include on home page) */}}
+{{- if .IsHome }}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "{{ site.Title }}",
+  "url": "{{ site.BaseURL }}",
+  "description": "{{ site.Params.description | plainify }}",
+  "inLanguage": "{{ site.LanguageCode }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {
+      "@type": "EntryPoint",
+      "urlTemplate": "{{ site.BaseURL }}/search/?q={search_term_string}"
+    },
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{{- end }}

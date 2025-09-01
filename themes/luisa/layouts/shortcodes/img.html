@@ -1,0 +1,52 @@
+{{/*
+  Responsive image shortcode with automatic optimization
+  Usage: {{< img src="image.jpg" alt="Description" >}}
+  Optional: class, sizes, lazy
+*/}}
+
+{{- $src := .Get "src" }}
+{{- $alt := .Get "alt" }}
+{{- $class := .Get "class" | default "responsive-image" }}
+{{- $sizes := .Get "sizes" | default "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" }}
+{{- $lazy := .Get "lazy" | default true }}
+
+{{- $image := "" }}
+{{- with .Page.Resources.GetMatch $src }}
+  {{- $image = . }}
+{{- else }}
+  {{- with resources.Get $src }}
+    {{- $image = . }}
+  {{- else }}
+    {{- errorf "Image not found: %s" $src }}
+  {{- end }}
+{{- end }}
+
+{{- if $image }}
+  {{/* Generate different sizes for responsive loading */}}
+  {{- $small := $image.Resize "400x webp q85" }}
+  {{- $medium := $image.Resize "800x webp q85" }}
+  {{- $large := $image.Resize "1200x webp q85" }}
+  
+  {{/* Generate JPEG fallbacks */}}
+  {{- $smallJPG := $image.Resize "400x jpg q85" }}
+  {{- $mediumJPG := $image.Resize "800x jpg q85" }}
+  {{- $largeJPG := $image.Resize "1200x jpg q85" }}
+
+  <picture class="{{ $class }}">
+    {{/* Modern WebP format */}}
+    <source 
+      srcset="{{ $small.RelPermalink }} 400w, {{ $medium.RelPermalink }} 800w, {{ $large.RelPermalink }} 1200w"
+      sizes="{{ $sizes }}"
+      type="image/webp">
+    
+    {{/* JPEG fallback */}}
+    <img 
+      src="{{ $mediumJPG.RelPermalink }}"
+      srcset="{{ $smallJPG.RelPermalink }} 400w, {{ $mediumJPG.RelPermalink }} 800w, {{ $largeJPG.RelPermalink }} 1200w"
+      sizes="{{ $sizes }}"
+      alt="{{ $alt }}"
+      {{ if $lazy }}loading="lazy"{{ end }}
+      width="{{ $medium.Width }}"
+      height="{{ $medium.Height }}">
+  </picture>
+{{- end }}
